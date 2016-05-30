@@ -1,12 +1,13 @@
 ---
 
-- name: Add the OS specific varibles
-  include_vars: "{{ ansible_os_family }}.yml"
-  when: php_version != "7.0"
-  
-- name: Add the OS specific varibles
-  include_vars: "{{ ansible_os_family }}_7.yml"
-  when: php_version == "7.0"
+- include_vars: "{{ item }}"
+  with_first_found:
+    - files:
+       - "{{ ansible_os_family }}-{{ ansible_distribution_release }}.yml"
+       - "{{ ansible_os_family }}.yml"
+       - default.yml
+      paths:
+       - "../vars/"
  
 - name: Install the php packages (APT)
   apt: >
@@ -14,7 +15,7 @@
     state=present
     update_cache=yes
     cache_valid_time={{ apt_cache_valid_time }}
-  with_items: php_fpm_apt_packages
+  with_items: "{{ php_fpm_apt_packages }}"
   environment: "{{ env }}"
   when: ansible_os_family == "Debian"
   notify:
@@ -23,7 +24,7 @@
 
 - name: Install the php packages (YUM)
   yum: name={{ item }} state=present
-  with_items: php_fpm_yum_packages
+  with_items: "{{ php_fpm_yum_packages }}"
   environment: "{{ env }}"
   when: ansible_os_family == "RedHat"
   notify:
@@ -37,13 +38,15 @@
     option="{{ item.option }}"
     value="{{ item.value }}"
     backup=yes
-  with_items: php_fpm_ini
+  with_items: "{{ php_fpm_ini }}"
   notify:
    - restart php-fpm
   tags: [configuration,php,fpm]
 
 - name: Copy default FPM configuration file
-  template: dest={{ php_fpm_config_path }} src=php-fpm.conf.j2
+  template:
+    dest="{{ php_fpm_config_path }}"
+    src=php-fpm.conf.j2
   when: ansible_os_family == "RedHat"
   tags: [configuration,php,fpm]
 
@@ -54,7 +57,7 @@
     option="{{ item.option }}"
     value="{{ item.value }}"
     backup=yes
-  with_items: php_fpm_config
+  with_items: "{{ php_fpm_config }}"
   register: copy_fpm_config
   notify:
    - restart php-fpm
@@ -97,7 +100,7 @@
     src=pool.conf.j2
     dest={{ php_fpm_pool_d }}/{{ item['name'] }}.conf
     backup=yes
-  with_items: php_fpm_pools
+  with_items: "{{ php_fpm_pools }}"
   when: php_fpm_pools|lower != 'none'
   notify:
    - restart php-fpm
@@ -110,5 +113,8 @@
   tags: [configuration,php,fpm]
 
 - name: Start the php5-fpm service
-  service: name={{ php_fpm_service_name }} state=started enabled=yes
+  service:
+    name={{ php_fpm_service_name }}
+    state=started
+    enabled=yes
   tags: [service,php,fpm]

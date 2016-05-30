@@ -3,7 +3,7 @@ galaxy_info:
   author: Sergey Fayngold
   company: My.com B.V.
   license: BSD
-  min_ansible_version: 1.4
+  min_ansible_version: 1.9
   platforms:
   - name: EL
     versions:
@@ -19,7 +19,7 @@ galaxy_info:
   #  - quantal
   #  - raring
   #  - saucy
-  #  - trusty
+    - trusty
   - name: Debian
     versions:
   #  - all
@@ -35,4 +35,3 @@ galaxy_info:
   #- system
   - web
 dependencies: []
-  
