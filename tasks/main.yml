@@ -3,7 +3,6 @@
 - include_vars: "{{ item }}"
   with_first_found:
     - files:
-       - "{{ ansible_os_family }}-{{ ansible_distribution_release }}-php{{ php_fpm_version }}.yml"
        - "{{ ansible_os_family }}-{{ ansible_distribution_release }}.yml"
        - "{{ ansible_os_family }}.yml"
        - default.yml
