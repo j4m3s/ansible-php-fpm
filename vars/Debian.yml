@@ -11,6 +11,7 @@ php_fpm_vars:
     php_fpm_service_name: php5-fpm
 
     php_fpm_pid_file: /var/run/php5-fpm.pid
+    php_fpm_error_log: /var/log/php5-fpm.log
 
   v7:
     php_fpm_ini_path: /etc/php/7.0/fpm/php.ini
@@ -21,10 +22,12 @@ php_fpm_vars:
     php_fpm_service_name: php7.0-fpm
 
     php_fpm_pid_file: /var/run/php-fpm.pid
+    php_fpm_error_log: /var/log/php-fpm.log
 
 php_fpm_ini_path: "{{ php_fpm_vars[branch]['php_fpm_ini_path']}}"
 php_fpm_config_path: "{{ php_fpm_vars[branch]['php_fpm_config_path']}}"
 php_fpm_pool_d: "{{ php_fpm_vars[branch]['php_fpm_pool_d']}}"
+php_fpm_error_log: "{{ php_fpm_vars[branch]['php_fpm_error_log']}}"
 
 php_fpm_binary_name: "{{ php_fpm_vars[branch]['php_fpm_binary_name']}}"
 php_fpm_service_name: "{{ php_fpm_vars[branch]['php_fpm_service_name']}}"
