@@ -15,14 +15,17 @@ Role Variables
 
 The role uses the following variables:
 
+ - **php_fpm_version**: The version of php to be installed.  Defaults to "5.6". 
+   **Note** this must include both the major version number and the minor version 
+   number/ mantissa.
  - **php_fpm_pools**: The list a pools for php-fpm, each pools is a hash with
    a name entry (used for filename), all the other entries in the hash are pool
    directives (see http://php.net/manual/en/install.fpm.configuration.php).
  - **php_fpm_pool_defaults**: A list of default directives used for all php-fpm pools
    (see http://php.net/manual/en/install.fpm.configuration.php).
- - **php_fpm_apt_packages**: The list of packages to be installed by the
-  ```apt```, defaults to ```[php5-fpm]```.
-   module.
+ - **php_fpm_apt_packages**: The list of packages to be installed by the ```apt``` module. 
+    Defaults to ```[php5-fpm]``` or ```[php-fpm]``` depending on the ```php_fpm_version``` 
+    specified.
  - **php_fpm_yum_packages**: The list of packages to be installed by the
    ```yum``` module, defaults to ```[php-fpm]```.
  - **php_fpm_ini**: Customization for php-fpm's php.ini as a list of options,
@@ -32,8 +35,6 @@ The role uses the following variables:
      - **section**: Section name in INI file.
  - **php_fpm_config**: Customization for php-fpm's configuration file as a list
    of options.
- - **php_fpm_apt_packages**: The APT packages to install, defaults to ```[php5-fpm]```.
- - **php_fpm_yum_packages**: The Yum packages to install, defaults to ```[php-fpm]```.
  - **php_fpm_default_pool**:
      - **delete**: Set to a ```True``` value to delete the default pool.
      - **name**: The filename the default pool configuration file.
@@ -42,6 +43,7 @@ Example configuration
 --------------
 
     - role: php-fpm
+      php_fpm_version: 7.0
       php_fpm_pool_defaults:
         pm: dynamic
         pm.max_children: 5
