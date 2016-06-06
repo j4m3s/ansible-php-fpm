@@ -8,7 +8,7 @@
        - default.yml
       paths:
        - "../vars/"
- 
+
 - name: Install the php packages (APT)
   apt: >
     name={{ item }}
@@ -112,7 +112,7 @@
   changed_when: "result.rc != 0"
   tags: [configuration,php,fpm]
 
-- name: Start the php5-fpm service
+- name: Start the php-fpm service
   service:
     name={{ php_fpm_service_name }}
     state=started
